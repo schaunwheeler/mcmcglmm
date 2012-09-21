@@ -398,7 +398,7 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 		
 		object$Z <- ranef[,match(colnames(object$Z),colnames(ranef))]
 		
-		object$error.term <- object$error.term[1:nrow(Wn)]
+		object$error.term <- rep(object$error.term[1],nrow(Wn))
 		
 		W <- Wn[,match(colnames(W),colnames(Wn))]
 		
