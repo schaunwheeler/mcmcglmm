@@ -1,23 +1,24 @@
+# File-Name:       mcmcglmm.R           
+# Date:            2012-09-21                     
+# Author:          Schaun Wheeler
+# Email:           schaun.wheeler@gmail.com                                      
+# Purpose:         To expand the capabilities of the MCMCglmm package,
+#                  particularly as it relates to issues of cross-validation.
+# Data Used:       none
+# Packages Used:   MCMCglmm
+# Output File:     
+# Data Output:     
+# Machine:         Schaun Wheeler's Dell Precision T7500 and MacBook Pro
+
+# Copyright (c) 2012, under the Simplified BSD License.  
+# For more information on FreeBSD see: 
+# http://www.opensource.org/licenses/bsd-license.php
+# All rights reserved.
+
+# Load libraries
 library(MCMCglmm)
 
-df <- as.data.frame(matrix(rnorm(200),ncol=2))
-df$F1 <- sample(LETTERS[1:3],100, replace = T)
-df$F2 <- sample(LETTERS[4:5],100, replace = T)
-df <- rbind(df,c(0,0,"X","Y"))
-df$V1 <- as.numeric(df$V1)
-df$V2 <- as.numeric(df$V2)
-
-df <- as.data.frame(matrix(rnorm(20),ncol=2))
-df$F1 <- sample(LETTERS[1:3],10, replace = T)
-df$F2 <- sample(LETTERS[4:5],10, replace = T)
-
-df2 <- df
-
-table(as.data.frame(t(sapply(1:1000,function(...)sapply(SplitData(df),nrow)))))
-
-model <- mcmcglmm(V1~V2+F2,random=~us(1+V2):F1+F2,pr=T,data=df)
-
-
+# Load functions
 SplitData <- function(data, percent = .8, ignore = NULL){
 
 	facs <- sapply(data,is.factor)
@@ -52,7 +53,7 @@ SplitData <- function(data, percent = .8, ignore = NULL){
 	
 	missvals <- lapply(1:length(smallvals), 
 										function(x)smallvals[[x]][!(smallvals[[x]] %in% bigvals[[x]])])
-	missvals
+
 	if(length(misses) > 0){
 		for(i in misses){
 			for(j in 1:length(missvals[[i]])){
