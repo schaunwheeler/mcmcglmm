@@ -7,11 +7,15 @@ df <- rbind(df,c(0,0,"X","Y"))
 df$V1 <- as.numeric(df$V1)
 df$V2 <- as.numeric(df$V2)
 
-df2 <- df[rep(1,10),]
+df <- as.data.frame(matrix(rnorm(20),ncol=2))
+df$F1 <- sample(LETTERS[1:3],10, replace = T)
+df$F2 <- sample(LETTERS[4:5],10, replace = T)
+
+df2 <- df
 
 table(as.data.frame(t(sapply(1:1000,function(...)sapply(SplitData(df),nrow)))))
 
-tst <- mcmcglmm(V1~V2+F2,random=~us(1+V2):F1+F2,pr=T,data=df)
+model <- mcmcglmm(V1~V2+F2,random=~us(1+V2):F1+F2,pr=T,data=df)
 
 
 SplitData <- function(data, percent = .8, ignore = NULL){
@@ -392,6 +396,8 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 		object$X <- fixef[,match(colnames(object$X),colnames(fixef))]
 		
 		object$Z <- ranef[,match(colnames(object$Z),colnames(ranef))]
+		
+		object$error.term <- object$error.term[1:nrow(Wn)]
 		
 		W <- Wn[,match(colnames(W),colnames(Wn))]
 		
