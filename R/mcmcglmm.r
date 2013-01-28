@@ -123,7 +123,7 @@ mcmcglmm <- function(fixed, random=NULL, rcov=~units, family="gaussian",
 	
 	fixvar <- split.direct.sum(as.character(fixed)[3])
 	ranvar <- split.direct.sum(as.character(random)[2])
-	
+
 	f <- sapply(fixvar,function(x){
 		if(grepl(":",x)){
 			frt <- gsub("(\\w+):(\\w+)", "\\1", x)
@@ -139,6 +139,10 @@ mcmcglmm <- function(fixed, random=NULL, rcov=~units, family="gaussian",
 		}
 		y
 	})
+    
+    if(is.null(fixvar)){
+      f <- 0
+    }
 	
   r <- sapply(ranvar,function(x){
     if(grepl("(us|idh|cor)\\(1 [+] ", x)){
@@ -158,7 +162,7 @@ mcmcglmm <- function(fixed, random=NULL, rcov=~units, family="gaussian",
 	
 	names(r)<-NULL
   
-	B = list(mu = rep(0,sum(f)), V = diag(sum(f))*(1e10))
+	B = list(mu = rep(0,sum(f)+1), V = diag(sum(f)+1)*(1e10))
 	
 	if(grepl("\\bInvW", prior)){
 	  R = list(V = 1, nu = 1)
@@ -316,9 +320,9 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 	
 	if(!is.null(newdata)){
 		chars <- sapply(newdata,is.character)
-		newdata[,chars] <- lapply(newdata[,chars],as.factor)
+		newdata[,chars] <- lapply(newdata[,chars, drop = FALSE],as.factor)
 		
-		vars.o <- paste(as.character(object$Fixed[[1]]),
+		vars.o <- paste(as.character(object$Fixed[[1]])[-c(1:2)],
 										as.character(object$Random[[1]]), collapse = " ")
 		vars.o <- gsub("~|(us|idh|cor)\\(|[+]|\\):|\\b1\\b"," ", vars.o)
 		vars.o <- unlist(strsplit(vars.o, split = "\\s+"))
@@ -338,7 +342,9 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 																		labels = object$datalevels[[facs.o[i]]])
 		}
 		
-		fixef <- sparse.model.matrix(object$Fixed[[1]], newdata)
+		fixef <- sparse.model.matrix(
+      as.formula(paste("~",as.character(object$Fixed[[1]])[-c(1:2)])), 
+      newdata)
 		
 		rterms <- split.direct.sum(as.character(object$Random[[1]])[2])
 		
