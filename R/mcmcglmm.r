@@ -333,7 +333,7 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 		}
 		
 		facs <- sapply(newdata,is.factor)
-		facs.o <- vars.o[facs]
+		facs.o <- vars.o[vars.o %in% names(facs)[facs]]
 		
 		for(i in 1:length(facs.o)){
 			newdata[,facs.o[i]] <- factor(newdata[,facs.o[i]], 
