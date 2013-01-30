@@ -495,11 +495,11 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 		if (any(object$family %in% c("poisson", "cenpoisson"))) {
 			keep <- which(object$family %in% c("poisson", "cenpoisson"))
 			if (interval == "prediction") {
-				post.pred[, keep] <- exp(post.pred[, keep])
+				post.pred[, keep, drop = FALSE] <- exp(post.pred[, keep, drop = FALSE])
 			}
 			else {
-				post.pred[, keep] <- exp(post.pred[, keep] + 
-					0.5 * postvar[, keep])
+				post.pred[, keep, drop = FALSE] <- exp(post.pred[, keep, drop = FALSE] + 
+					0.5 * postvar[, keep, drop = FALSE])
 			}
 		}
 		if (any(object$family %in% c("multinomial", "categorical"))) {
@@ -507,11 +507,11 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 			keep <- which(object$family %in% c("multinomial", 
 																				 "categorical"))
 			if (interval == "prediction") {
-				post.pred[, keep] <- plogis(post.pred[, keep])
+				post.pred[, keep, drop = FALSE] <- plogis(post.pred[, keep, drop = FALSE])
 			}
 			else {
-				post.pred[, keep] <- plogis(post.pred[, keep]/sqrt(1 + 
-					c2 * postvar[, keep]))
+				post.pred[, keep] <- plogis(post.pred[, keep, drop = FALSE]/sqrt(1 + 
+					c2 * postvar[, keep, drop = FALSE]))
 			}
 		}
 		if (any(object$family %in% c("ordinal"))) {
@@ -520,8 +520,8 @@ PredictNew <- function (object, newdata = NULL, marginal = NULL, type = "terms",
 			q <- matrix(0, dim(post.pred)[1], length(keep))
 			if (interval == "prediction") {
 				for (i in 2:(dim(CP)[2] - 1)) {
-					q <- q + (pnorm(CP[, i + 1] - post.pred[, keep]) - 
-						pnorm(CP[, i] - post.pred[, keep])) * (i - 
+					q <- q + (pnorm(CP[, i + 1] - post.pred[, keep, drop = FALSE]) - 
+						pnorm(CP[, i] - post.pred[, keep, drop = FALSE])) * (i - 
 						1)
 				}
 			}
