@@ -2,7 +2,7 @@
 
 *PLEASE NOTE: THIS PACKAGE WAS ONLY EVER EXPERIMENTAL. IT ONLY EVER WORKED
 WITH THE "GAUSSIAN" FAMILY. IT WAS NEVER EXTENSIVELY TESTED. AND I NO
-LONGER MAINTAIN THIS CODE.*
+LONGER ACTIVELY MAINTAIN THIS CODE. I DON'T EVEN WRITE R CODE ANYMORE.*
 
 The aim of `mcmcglmm` is to provide some added functionality to the MCMCglmm
 package by facilitating cross validation through both data preparation and 
