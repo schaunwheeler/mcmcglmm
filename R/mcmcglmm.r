@@ -15,6 +15,9 @@
 # http://www.opensource.org/licenses/bsd-license.php
 # All rights reserved.
 
+# THIS PACKAGE IS NO LONGER ACTIVELY MAINTAINED. IT ONLY EVER WORKED FOR
+# THE "GAUSSIAN" FAMILY, AND EVEN THAT WAS NOT TESTED MUCH.
+
 # Load libraries
 library(MCMCglmm)
 
